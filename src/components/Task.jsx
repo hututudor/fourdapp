@@ -39,7 +39,7 @@ class Task extends React.Component {
     return (
       <Container>
         <span>
-          <input type="checkbox" />
+          <input onClick={() => this.props.complete(this.props.id)} checked={this.props.completed} type="checkbox" />
         </span>
         <h1>{this.props.children}</h1>
       </Container>

@@ -51,6 +51,19 @@ class Category extends React.Component {
     });
   };
 
+  canTaskBeShown(task) {
+    if (
+      task.completed === true &&
+      this.props.name.toLowerCase() === 'completed'
+    ) {
+      return true;
+    } else if (task.completed === true) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   render() {
     return (
       <Container>
@@ -64,9 +77,18 @@ class Category extends React.Component {
         </span>
         {this.state.show && (
           <div className="tasks">
-            {this.props.tasks.map((task, index) => (
-              <Task key={index}>{task.name}</Task>
-            ))}
+            {this.props.tasks.map(
+              (task, index) =>
+                this.canTaskBeShown(task) && (
+                  <Task
+                    id={task.id}
+                    completed={task.completed}
+                    complete={this.props.complete}
+                    key={index}>
+                    {task.name}
+                  </Task>
+                ),
+            )}
           </div>
         )}
       </Container>

@@ -30,15 +30,30 @@ const Container = styled.div`
 `;
 
 class TaskForm extends React.Component {
+  state = {
+    input: ''
+  }
+
+  add = (type) => {
+    if(this.state.input) {
+      this.props.addNewTask(this.state.input, type);
+      this.setState({input: ''})
+    }
+  }
+
+  handleChange = e => {
+    this.setState({input: e.target.value});
+  }
+
   render() {
     return (
       <Container>
-        <input placeholder="Type your task" />
+        <input value={this.state.input} onChange={this.handleChange}  placeholder="Type your task" />
         <div className="buttons">
-          <Button>DO</Button>
-          <Button>DEFER</Button>
-          <Button>DELEGATE</Button>
-          <Button>DELETE</Button>
+          <Button disabled={!this.state.input} onClick={() => this.add('do')}>DO</Button>
+          <Button disabled={!this.state.input} onClick={() => this.add('delegate')}>DELEGATE</Button>
+          <Button disabled={!this.state.input} onClick={() => this.add('defer')}>DEFER</Button>
+          <Button disabled={!this.state.input} onClick={() => this.add('delete')}>DELETE</Button>
         </div>
         <hr />
       </Container>
