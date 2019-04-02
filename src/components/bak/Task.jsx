@@ -34,17 +34,17 @@ const Container = styled.div`
   }
 `;
 
-export default function Task(props) {
-  return (
-    <Container>
-      <span>
-        <input
-          onClick={() => props.complete(props.id)}
-          checked={props.completed}
-          type="checkbox"
-        />
-      </span>
-      <h1>{props.children}</h1>
-    </Container>
-  );
+class Task extends React.Component {
+  render() {
+    return (
+      <Container>
+        <span>
+          <input onClick={() => this.props.complete(this.props.id)} checked={this.props.completed} type="checkbox" />
+        </span>
+        <h1>{this.props.children}</h1>
+      </Container>
+    );
+  }
 }
+
+export default Task;

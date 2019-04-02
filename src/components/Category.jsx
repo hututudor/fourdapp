@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Task from './Task.jsx';
 import styled from 'styled-components';
 import {colors} from '../config/variables.js';
@@ -40,60 +40,47 @@ const Container = styled.div`
   }
 `;
 
-class Category extends React.Component {
-  state = {
-    show: false,
+export default function Category(props) {
+  const [show, setShow] = useState(false);
+
+  const changeShow = () => {
+    setShow(!show);
   };
 
-  changeShow = () => {
-    this.setState({
-      show: !this.state.show,
-    });
-  };
-
-  canTaskBeShown(task) {
-    if (
-      task.completed === true &&
-      this.props.name.toLowerCase() === 'completed'
-    ) {
+  const canTaskBeShown = task => {
+    if (task.completed === true && props.name.toLowerCase() === 'completed') {
       return true;
     } else if (task.completed === true) {
       return false;
     } else {
       return true;
     }
-  }
+  };
 
-  render() {
-    return (
-      <Container>
-        <span>
-          <H>{this.props.name}</H>
-          <Button
-            className={this.state.show ? 'active' : ''}
-            onClick={this.changeShow}>
-            <Chevron />
-          </Button>
-        </span>
-        {this.state.show && (
-          <div className="tasks">
-            {this.props.tasks.map(
-              (task, index) =>
-                this.canTaskBeShown(task) && (
-                  <Task
-                    id={task.id}
-                    completed={task.completed}
-                    complete={this.props.complete}
-                    key={index}>
-                    {task.name}
-                  </Task>
-                ),
-            )}
-          </div>
-        )}
-      </Container>
-    );
-  }
+  return (
+    <Container>
+      <span>
+        <H>{props.name}</H>
+        <Button className={show ? 'active' : ''} onClick={changeShow}>
+          <Chevron />
+        </Button>
+      </span>
+      {show && (
+        <div className="tasks">
+          {props.tasks.map(
+            (task, index) =>
+              canTaskBeShown(task) && (
+                <Task
+                  id={task.id}
+                  completed={task.completed}
+                  complete={props.complete}
+                  key={index}>
+                  {task.name}
+                </Task>
+              ),
+          )}
+        </div>
+      )}
+    </Container>
+  );
 }
-
-export default Category;

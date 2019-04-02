@@ -18,31 +18,27 @@ const Container = styled.div`
   }
 `;
 
-class DoCategory extends React.Component {
-  render() {
-    return (
-      <Container>
-        <H>Do</H>
-        <div className="tasks">
-          {this.props.tasks.filter(task => task.completed === false).length === 0 ? (
-            <h2>Congratulations! You are very efficient.</h2>
-          ) : null}
-          {this.props.tasks.map(
-            (task, index) =>
-              !task.completed && (
-                <Task
-                  id={task.id}
-                  completed={task.completed}
-                  complete={this.props.complete}
-                  key={index}>
-                  {task.name}
-                </Task>
-              ),
-          )}
-        </div>
-      </Container>
-    );
-  }
+export default function DoCategory(props) {
+  return (
+    <Container>
+      <H>Do</H>
+      <div className="tasks">
+        {props.tasks.filter(task => task.completed === false).length === 0 ? (
+          <h2>Congratulations! You are very efficient.</h2>
+        ) : null}
+        {props.tasks.map(
+          (task, index) =>
+            !task.completed && (
+              <Task
+                id={task.id}
+                completed={task.completed}
+                complete={props.complete}
+                key={index}>
+                {task.name}
+              </Task>
+            ),
+        )}
+      </div>
+    </Container>
+  );
 }
-
-export default DoCategory;
