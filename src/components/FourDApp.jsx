@@ -3,6 +3,7 @@ import TaskForm from './TaskForm.jsx';
 import DoCategory from './DoCategory.jsx';
 import Category from './Category.jsx';
 import Modal from '../layout/Modal';
+import Chart from './Chart.jsx';
 import styled from 'styled-components';
 import uuidv4 from 'uuid/v4';
 
@@ -21,12 +22,29 @@ const Container = styled.div`
   }
 `;
 
+const ChartContainer = styled.div`
+  padding: 9rem !important;
+
+  @media only screen and (max-width: 600px) {
+    padding: 0;
+  }
+
+  h1 {
+    text-align: center;
+  }
+`;
+
 export default function FourDApp() {
   const [tasks, setTasks] = useState([]);
   const [doModal, setDoModal] = useState(false);
+  const [chartData, setChartData] = useState([]);
 
   const addNewTask = (name, type) => {
-    if (type === 'do' && tasks.filter(task => task.type === 'do' && task.completed === false).length >= 3) {
+    if (
+      type === 'do' &&
+      tasks.filter(task => task.type === 'do' && task.completed === false)
+        .length >= 3
+    ) {
       setTasks(
         tasks.concat({
           name,
@@ -71,6 +89,27 @@ export default function FourDApp() {
     }, 2000);
   };
 
+  useEffect(() => {
+    setChartData([
+      {
+        name: 'Do',
+        value: tasks.filter(task => task.type === 'do').length,
+      },
+      {
+        name: 'Delegate',
+        value: tasks.filter(task => task.type === 'delegate').length,
+      },
+      {
+        name: 'Defer',
+        value: tasks.filter(task => task.type === 'defer').length,
+      },
+      {
+        name: 'Delete',
+        value: tasks.filter(task => task.type === 'delete').length,
+      },
+    ]);
+  }, [tasks]);
+
   return (
     <React.Fragment>
       <Modal
@@ -105,6 +144,12 @@ export default function FourDApp() {
           name="Completed"
         />
       </Container>
+      {chartData.filter(data => data.value > 0).length > 0 && (
+        <ChartContainer>
+          <h1>Tasks this week</h1>
+          <Chart data={chartData} />
+        </ChartContainer>
+      )}
     </React.Fragment>
   );
 }
