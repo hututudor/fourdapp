@@ -51,6 +51,7 @@ export default function FourDApp() {
           type: 'defer',
           id: uuidv4(),
           completed: false,
+          date: Date.now(),
         }),
       );
 
@@ -64,6 +65,7 @@ export default function FourDApp() {
         type,
         id: uuidv4(),
         completed: false,
+        date: Date.now(),
       }),
     );
   };
@@ -90,22 +92,40 @@ export default function FourDApp() {
   };
 
   useEffect(() => {
+    console.log(tasks);
+    let total = tasks.length;
+
+    let doV = tasks.filter(task => task.type === 'do' && task.completed === true).length;
+    let delegateV = tasks.filter(task => task.type === 'delegate' && task.completed === true).length;
+    let deferV = tasks.filter(task => task.type === 'defer' && task.completed === true).length;
+    let deleteV = tasks.filter(task => task.type === 'delete' && task.completed === true).length;
+
+    if (total === 0) {
+      setChartData([
+        {name: 'Do', value: 25},
+        {name: 'Delegate', value: 25},
+        {name: 'Defer', value: 25},
+        {name: 'Delete', value: 25},
+      ]);
+      return;
+    }
+
     setChartData([
       {
         name: 'Do',
-        value: tasks.filter(task => task.type === 'do').length,
+        value: (doV * 100) / total,
       },
       {
         name: 'Delegate',
-        value: tasks.filter(task => task.type === 'delegate').length,
+        value: (delegateV * 100) / total,
       },
       {
         name: 'Defer',
-        value: tasks.filter(task => task.type === 'defer').length,
+        value: (deferV * 100) / total,
       },
       {
         name: 'Delete',
-        value: tasks.filter(task => task.type === 'delete').length,
+        value: (deleteV * 100) / total,
       },
     ]);
   }, [tasks]);
@@ -144,12 +164,10 @@ export default function FourDApp() {
           name="Completed"
         />
       </Container>
-      {chartData.filter(data => data.value > 0).length > 0 && (
-        <ChartContainer>
-          <h1>Tasks this week</h1>
-          <Chart data={chartData} />
-        </ChartContainer>
-      )}
+      <ChartContainer>
+        <h1>Tasks this week</h1>
+        <Chart data={chartData} />
+      </ChartContainer>
     </React.Fragment>
   );
 }
