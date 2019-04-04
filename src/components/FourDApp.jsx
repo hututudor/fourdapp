@@ -95,12 +95,12 @@ export default function FourDApp() {
     console.log(tasks);
     let total = tasks.length;
 
-    let doV = tasks.filter(task => task.type === 'do' && task.completed === true).length;
-    let delegateV = tasks.filter(task => task.type === 'delegate' && task.completed === true).length;
-    let deferV = tasks.filter(task => task.type === 'defer' && task.completed === true).length;
-    let deleteV = tasks.filter(task => task.type === 'delete' && task.completed === true).length;
+    let doV = tasks.filter(task => task.type === 'do' && task.completed === false && Date.now() - new Date(task.date).getTime() <= 604800000).length;
+    let delegateV = tasks.filter(task => task.type === 'delegate' && task.completed === false && Date.now() - new Date(task.date).getTime() <= 604800000).length;
+    let deferV = tasks.filter(task => task.type === 'defer' && task.completed === false && Date.now() - new Date(task.date).getTime() <= 604800000).length;
+    let deleteV = tasks.filter(task => task.type === 'delete' && task.completed === false && Date.now() - new Date(task.date).getTime() <= 604800000).length;
 
-    if (total === 0) {
+    if (total === 0 || doV + deleteV + deferV + deleteV === 0) {
       setChartData([
         {name: 'Do', value: 25},
         {name: 'Delegate', value: 25},
